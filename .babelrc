@@ -1,0 +1,29 @@
+{
+  "presets": [
+    "next/babel"
+  ],
+  "plugins": [
+    [
+      "module-resolver",
+      {
+        "root": ["."],
+        "alias": {
+          "styles": "./styles"
+        },
+        "cwd": "babelrc"
+      }
+    ],
+    [
+      "wrap-in-js",
+      { "extensions": ["css$"] }
+    ]
+  ],
+  "env": {
+    "development": {
+      "plugins": ["inline-dotenv"]
+    },
+    "production": {
+      "plugins": ["transform-inline-environment-variables"]
+    }
+  }
+}

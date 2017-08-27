@@ -1,0 +1,7 @@
+{
+  "name": "moci",
+  "alias": "moci",
+  "engines": {
+    "node": "8.x.x"
+  }
+}
