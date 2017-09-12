@@ -20,3 +20,6 @@ https://github.com/sugarshin/mo/blob/master/.env.example
 [MIT][license-url]
 
 © sugarshin
+
+[license-image]: https://img.shields.io/:license-mit-blue.svg?style=flat-square
+[license-url]: https://sugarshin.mit-license.org/
