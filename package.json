@@ -9,7 +9,8 @@
     "dev": "node server",
     "prebuild": "npm run clean:build",
     "build": "next build",
-    "deploy": "now --public -e NODE_ENV=production -n moci && now alias",
+    "deploy": "now --public -e NODE_ENV=production -n moci --no-clipboard",
+    "alias": "now alias --no-clipboard",
     "start": "NODE_ENV=production node server"
   },
   "repository": {
