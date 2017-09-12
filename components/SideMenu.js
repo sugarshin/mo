@@ -4,7 +4,8 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import classnames from 'classnames'
 import getYear from 'date-fns/get_year'
-import { signout, rebuild, cancelBuild, rebuildWithoutCache } from '../redux/actions/async'
+import { rebuild, cancelBuild, rebuildWithoutCache } from '../redux/actions/async'
+import { signout } from '../redux/actions'
 
 const SideMenu = ({ signout, rebuild, cancelBuild, rebuildWithoutCache, isOpen, buildUrl, token }) => {
   return (
@@ -41,7 +42,7 @@ const SideMenu = ({ signout, rebuild, cancelBuild, rebuildWithoutCache, isOpen, 
         <ListGroupItem onClick={signout}>Signout</ListGroupItem>
         <ListGroupItem>
           <Label>Token</Label>
-          <Input type='text' disabled value={token} />
+          <Input type='text' disabled value={token || ''} />
         </ListGroupItem>
       </ListGroup>
       <div className='copyright'>

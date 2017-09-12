@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react'
-import Router from 'next/router'
+import { withRouter } from 'next/router'
 import Head from 'next/head'
 import Error from 'next/error'
 import Spinner from 'react-spinner'
@@ -9,7 +9,7 @@ import stylesheet from 'styles/index.css'
 import GlobalHeader from './GlobalHeader'
 import SideMenu from './SideMenu'
 import Delay from './Delay'
-import { toggleSidemenu } from '../redux/actions'
+import { closeSidemenu, toggleSidemenu } from '../redux/actions'
 
 class Layout extends PureComponent {
   static get defaultProps() {
@@ -17,12 +17,14 @@ class Layout extends PureComponent {
   }
   componentWillMount() {
     if (!this.props.signedIn) {
-      Router.replace('/authorize')
+      this.props.closeSidemenu()
+      this.props.router.replace('/authorize')
     }
   }
   componentWillReceiveProps(nextProps) {
     if (this.props.signedIn === true && nextProps.signedIn === false) {
-      Router.replace('/authorize')
+      this.props.closeSidemenu()
+      this.props.router.replace('/authorize')
     }
   }
   renderError(statusCode) {
@@ -92,5 +94,7 @@ export default connect(
     loading: Object.values(state).some(s => s.isRequesting),
     isSidemenuOpen: !!state.sidemenu.isOpen,
   }),
-  dispatch => bindActionCreators({ toggleSidemenu }, dispatch)
-)(Layout)
+  dispatch => bindActionCreators({ closeSidemenu, toggleSidemenu }, dispatch)
+)(
+  withRouter(Layout)
+)

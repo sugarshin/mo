@@ -3,7 +3,7 @@ import { parse } from 'url'
 import { PureComponent } from 'react'
 import Spinner from 'react-spinner'
 import Link from 'next/link'
-import Router from 'next/router'
+import { withRouter } from 'next/router'
 import withRedux from 'next-redux-wrapper'
 import { bindActionCreators } from 'redux'
 import makeStore from '../redux/store/makeStore'
@@ -43,7 +43,7 @@ class Build extends PureComponent {
       (this.props.isRebuildRequesting === true && nextProps.isRebuildRequesting === false)
     ) {
       this.props.closeSidemenu();
-      Router.push('/');
+      this.props.router.push('/');
     }
   }
   render() {
@@ -121,4 +121,6 @@ export default withRedux(
     isRebuildRequesting: state.build.isRebuildRequesting,
   }),
   dispatch => bindActionCreators({ resetBuild, pollFetchSingleBuild, fetchSteps, closeSidemenu }, dispatch)
-)(Build)
+)(
+  withRouter(Build)
+)
