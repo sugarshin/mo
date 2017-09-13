@@ -29,10 +29,25 @@ class Top extends PureComponent {
   }
   getBadgeColor(outcome) {
     switch (outcome) {
-      case 'failed': return 'danger'
-      case 'canceled': return 'default'
-      case 'success': return 'success'
-      default: return 'info'
+      case 'failed':
+      case 'infrastructure_fail':
+      case 'timedout':
+        return 'danger'
+      case 'not_run':
+      case 'canceled':
+        return 'default'
+      case 'success':
+      case 'fixed':
+        return 'success'
+      case 'no_tests':
+        return 'warning'
+      case 'retried':
+      case 'running':
+      case 'queued':
+      case 'scheduled':
+      case 'not_running':
+      default:
+        return 'info'
     }
   }
   render() {
@@ -62,6 +77,9 @@ class Top extends PureComponent {
             color: #839496;
             text-decoration: none;
           }
+          .content {
+            max-width: calc(100% - 45px);
+          }
           :global(.build-list.list-group) {
             margin-bottom: 1rem;
           }
@@ -70,18 +88,30 @@ class Top extends PureComponent {
           }
           :global(.build-list .list-group-item-heading) {
             margin: 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            word-break: break-word;
+            overflow-wrap: break-word;
           }
           :global(.build-list .list-group-item-text) {
             margin: 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            word-break: break-word;
+            overflow-wrap: break-word;
           }
           .platform {
             display: block;
             position: absolute;
             z-index: 1;
             height: 100%;
-            right: 30px;
+            right: 25px;
             top: 0;
-            padding-top: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
           }
           .arrow {
             display: block;
@@ -91,7 +121,9 @@ class Top extends PureComponent {
             right: 0;
             top: 0;
             color: #002b36;
-            padding-top: 38px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             width: 15px;
             text-align: center;
             background: #839496;
@@ -109,14 +141,18 @@ class Top extends PureComponent {
             <ListGroupItem key={`${b.vcs_type}-${b.vcs_revision}-${b.build_num}`}>
               <Link href={`/build?url=${parse(b.build_url).pathname}`}>
                 <a className='cell'>
-                  <Badge color={this.getBadgeColor(b.outcome)} pill>{b.outcome || 'running'}</Badge>{' '}
+                  <Badge color={this.getBadgeColor(b.status)} pill>
+                    {b.dont_build ? b.dont_build : b.status}
+                  </Badge>{' '}
                   <span>{`#${b.build_num}`}</span>
-                  <ListGroupItemHeading>
-                    <span>{`${b.username} / ${b.reponame}`}</span>
-                  </ListGroupItemHeading>
-                  <ListGroupItemText>
-                    <span>{b.subject}</span>
-                  </ListGroupItemText>
+                  <div className='content'>
+                    <ListGroupItemHeading>
+                      <span>{`${b.username} / ${b.reponame}`}</span>
+                    </ListGroupItemHeading>
+                    <ListGroupItemText>
+                      <span>{b.subject}</span>
+                    </ListGroupItemText>
+                  </div>
                   <span className='platform'>{b.platform}</span>
                   <span className='arrow'><Octicon name='chevron-right' /></span>
                 </a>

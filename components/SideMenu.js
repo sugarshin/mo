@@ -1,5 +1,6 @@
 import React from 'react'
 import { Label, Input, ListGroup, ListGroupItem } from 'reactstrap'
+import Avatar from 'react-avatar'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import classnames from 'classnames'
@@ -7,9 +8,19 @@ import getYear from 'date-fns/get_year'
 import { rebuild, cancelBuild, rebuildWithoutCache } from '../redux/actions/async'
 import { signout } from '../redux/actions'
 
-const SideMenu = ({ signout, rebuild, cancelBuild, rebuildWithoutCache, isOpen, buildUrl, token }) => {
+const SideMenu = ({
+  signout,
+  rebuild,
+  cancelBuild,
+  rebuildWithoutCache,
+  isOpen,
+  buildUrl,
+  token,
+  avatarUrl,
+  username
+}) => {
   return (
-    <aside className={classnames({ open: isOpen })}>
+    <aside className={classnames('global-sidemenu', { open: isOpen })}>
       <style jsx>{`
         aside {
           position: fixed;
@@ -25,6 +36,11 @@ const SideMenu = ({ signout, rebuild, cancelBuild, rebuildWithoutCache, isOpen, 
           overflow: auto;
           z-index: 4;
         }
+        :global(.global-sidemenu .user.list-group-item) {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
         .open {
           transform: translateX(0);
         }
@@ -32,18 +48,31 @@ const SideMenu = ({ signout, rebuild, cancelBuild, rebuildWithoutCache, isOpen, 
           margin-top: 1em;
           text-align: center;
         }
+        .username {
+          display: inline-block;
+          margin: .5rem;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          word-break: break-word;
+          overflow-wrap: break-word;
+        }
       `}</style>
       <ListGroup>
         {buildUrl ? [
           <ListGroupItem key='rebuild' onClick={rebuild}>Rebuild</ListGroupItem>,
-          <ListGroupItem key='rebuild-withou-cache' onClick={rebuildWithoutCache}>Rebuild without cache</ListGroupItem>,
           <ListGroupItem key='cancel' onClick={cancelBuild}>Cancel</ListGroupItem>,
+          <ListGroupItem key='rebuild-withou-cache' onClick={rebuildWithoutCache}>Rebuild without cache</ListGroupItem>,
         ] : null}
-        <ListGroupItem onClick={signout}>Signout</ListGroupItem>
+        <ListGroupItem key='user' className='user'>
+          <Avatar src={avatarUrl} size={32} round />
+          <span className='username'>{username}</span>
+        </ListGroupItem>
         <ListGroupItem>
           <Label>Token</Label>
           <Input type='text' disabled value={token || ''} />
         </ListGroupItem>
+        <ListGroupItem onClick={signout}>Signout</ListGroupItem>
       </ListGroup>
       <div className='copyright'>
         <small>
@@ -55,7 +84,11 @@ const SideMenu = ({ signout, rebuild, cancelBuild, rebuildWithoutCache, isOpen, 
 }
 
 export default connect(
-  state => ({ token: state.auth.token }),
+  state => ({
+    token: state.auth.token,
+    avatarUrl: state.me.entity.avatar_url,
+    username: state.me.entity.login,
+  }),
   (dispatch, { buildUrl }) => bindActionCreators({
     signout,
     rebuild: () => rebuild(buildUrl),

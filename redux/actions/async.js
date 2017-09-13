@@ -84,7 +84,7 @@ export const fetchSteps = data => async (dispatch, getState, { cookies }) => {
   let payload
   try {
     const res = await Promise.all(
-      data.map(({ url }) => url ? request(url, null, 'text') : Promise.resolve())
+      data.map(({ url }) => url ? request(url, {}, 'text') : Promise.resolve())
     )
     payload = data.map((d, i) => ({
       ...d,
