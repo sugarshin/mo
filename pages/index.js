@@ -29,10 +29,25 @@ class Top extends PureComponent {
   }
   getBadgeColor(outcome) {
     switch (outcome) {
-      case 'failed': return 'danger'
-      case 'canceled': return 'default'
-      case 'success': return 'success'
-      default: return 'info'
+      case 'failed':
+      case 'infrastructure_fail':
+      case 'timedout':
+        return 'danger'
+      case 'not_run':
+      case 'canceled':
+        return 'default'
+      case 'success':
+      case 'fixed':
+        return 'success'
+      case 'no_tests':
+        return 'warning'
+      case 'retried':
+      case 'running':
+      case 'queued':
+      case 'scheduled':
+      case 'not_running':
+      default:
+        return 'info'
     }
   }
   render() {
@@ -63,7 +78,7 @@ class Top extends PureComponent {
             text-decoration: none;
           }
           .content {
-            max-width: calc(100% - 50px);
+            max-width: calc(100% - 45px);
           }
           :global(.build-list.list-group) {
             margin-bottom: 1rem;
@@ -92,7 +107,7 @@ class Top extends PureComponent {
             position: absolute;
             z-index: 1;
             height: 100%;
-            right: 30px;
+            right: 25px;
             top: 0;
             display: flex;
             align-items: center;
@@ -126,7 +141,9 @@ class Top extends PureComponent {
             <ListGroupItem key={`${b.vcs_type}-${b.vcs_revision}-${b.build_num}`}>
               <Link href={`/build?url=${parse(b.build_url).pathname}`}>
                 <a className='cell'>
-                  <Badge color={this.getBadgeColor(b.outcome)} pill>{b.outcome || 'running'}</Badge>{' '}
+                  <Badge color={this.getBadgeColor(b.status)} pill>
+                    {b.dont_build ? b.dont_build : b.status}
+                  </Badge>{' '}
                   <span>{`#${b.build_num}`}</span>
                   <div className='content'>
                     <ListGroupItemHeading>
