@@ -18,7 +18,7 @@ const makeStore = (initialState, { req }) => {
       reduxCatch((e, getState, action) => console.error(e, getState(), action)), // eslint-disable-line no-console
       thunk.withExtraArgument({ cookies }),
       signoutOnAuthorizationError,
-      createCookiesMiddleware({ cookies }),
+      createCookiesMiddleware({ cookies, option: { secure: true } }),
       throttle(400, { leading: true, trailing: true })
     )
   )
