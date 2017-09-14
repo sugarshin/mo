@@ -1,17 +1,29 @@
 import { createAction } from 'redux-actions'
+import addMonths from 'date-fns/add_months'
+import ms from 'ms'
 
 const AUTHORIZE = 'AUTHORIZE'
 export const authorize = createAction(
   AUTHORIZE,
   null,
-  payload => ({ cookies: { __ct: payload } })
+  payload => ({
+    cookies: {
+      __ct: {
+        value: payload,
+        option: {
+          expires: addMonths(new Date(), 3),
+          maxAge: ms(`${30 * 3}d`),
+        },
+      },
+    },
+  })
 )
 
 const SIGNOUT = 'SIGNOUT'
 export const signout = createAction(
   SIGNOUT,
   null,
-  payload => ({ cookies: { __ct: null } })
+  payload => ({ cookies: { __ct: { value: null } } })
 )
 
 const FETCH_ME_REQUEST = 'FETCH_ME_REQUEST'
