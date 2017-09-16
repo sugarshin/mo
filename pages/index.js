@@ -10,6 +10,7 @@ import {
   PaginationLink,
   Badge,
 } from 'reactstrap'
+import Avatar from 'react-avatar'
 import Link from 'next/link'
 import { withRouter } from 'next/router'
 import withRedux from 'next-redux-wrapper'
@@ -73,12 +74,12 @@ class Top extends PureComponent {
           a.cell {
             display: block;
             width: 100%;
-            padding: .5rem;
+            padding: .5rem 10px .5rem .5rem;
             color: #839496;
             text-decoration: none;
           }
           .content {
-            max-width: calc(100% - 45px);
+            max-width: calc(100% - 35px);
           }
           :global(.build-list.list-group) {
             margin-bottom: 1rem;
@@ -93,6 +94,8 @@ class Top extends PureComponent {
             text-overflow: ellipsis;
             word-break: break-word;
             overflow-wrap: break-word;
+            font-weight: bold;
+            line-height: 1.5;
           }
           :global(.build-list .list-group-item-text) {
             margin: 0;
@@ -102,12 +105,16 @@ class Top extends PureComponent {
             word-break: break-word;
             overflow-wrap: break-word;
           }
+          :global(.build-list .branch-icon) {
+            display: inline-block;
+            margin-right: .2rem;
+          }
           .platform {
             display: block;
             position: absolute;
             z-index: 1;
             height: 100%;
-            right: 25px;
+            right: 20px;
             top: 0;
             display: flex;
             align-items: center;
@@ -124,9 +131,12 @@ class Top extends PureComponent {
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 15px;
+            width: 10px;
             text-align: center;
             background: #839496;
+          }
+          :global(.build-list .arrow > span) {
+            transform: scale(0.6);
           }
           :global(.build-navs .page-link) {
             padding: 0;
@@ -135,21 +145,30 @@ class Top extends PureComponent {
             padding: 0.5rem 0.75rem;
             display: block;
           }
+          :global(.build-list .list-group-item-text .sb-avatar) {
+            margin-right: .2rem;
+          }
         `}</style>
         <ListGroup className='build-list'>
           {this.props.builds.map(b => (
             <ListGroupItem key={`${b.vcs_type}-${b.vcs_revision}-${b.build_num}`}>
               <Link href={`/build?url=${parse(b.build_url).pathname}`}>
                 <a className='cell'>
-                  <Badge color={this.getBadgeColor(b.status)} pill>
-                    {b.dont_build ? b.dont_build : b.status}
-                  </Badge>{' '}
-                  <span>{`#${b.build_num}`}</span>
+                  <div className='top'>
+                    <Badge color={this.getBadgeColor(b.status)} pill>
+                      {b.dont_build ? b.dont_build : b.status}
+                    </Badge>{' '}
+                    <span>{`#${b.build_num}`}</span>
+                  </div>
                   <div className='content'>
                     <ListGroupItemHeading>
                       <span>{`${b.username} / ${b.reponame}`}</span>
                     </ListGroupItemHeading>
-                    <ListGroupItemText>
+                    <ListGroupItemText tag='div'>
+                      <Octicon name='git-branch' className='branch-icon' /><span>{`${b.branch} (${b.vcs_revision.slice(0, 7)})`}</span>
+                    </ListGroupItemText>
+                    <ListGroupItemText tag='div'>
+                      <Avatar src={b.user.avatar_url} size={16} round />
                       <span>{b.subject}</span>
                     </ListGroupItemText>
                   </div>
