@@ -3,7 +3,6 @@ import React, { PureComponent } from 'react'
 import {
   ListGroup,
   ListGroupItem,
-  ListGroupItemHeading,
   ListGroupItemText,
   Pagination,
   PaginationItem,
@@ -87,7 +86,7 @@ class Top extends PureComponent {
           :global(.build-list .list-group-item) {
             padding: 0;
           }
-          :global(.build-list .list-group-item-heading) {
+          :global(.build-list .list-group-item-text.reponame) {
             margin: 0;
             white-space: nowrap;
             overflow: hidden;
@@ -96,6 +95,7 @@ class Top extends PureComponent {
             overflow-wrap: break-word;
             font-weight: bold;
             line-height: 1.5;
+            font-size: 1.1rem;
           }
           :global(.build-list .list-group-item-text) {
             margin: 0;
@@ -161,9 +161,9 @@ class Top extends PureComponent {
                     <span>{`#${b.build_num}`}</span>
                   </div>
                   <div className='content'>
-                    <ListGroupItemHeading>
+                    <ListGroupItemText tag='div' className='reponame'>
                       <span>{`${b.username} / ${b.reponame}`}</span>
-                    </ListGroupItemHeading>
+                    </ListGroupItemText>
                     <ListGroupItemText tag='div'>
                       <Octicon name='git-branch' className='branch-icon' /><span>{`${b.branch} (${b.vcs_revision.slice(0, 7)})`}</span>
                     </ListGroupItemText>
