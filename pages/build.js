@@ -1,5 +1,4 @@
 import querystring from 'querystring'
-import { parse } from 'url'
 import { PureComponent } from 'react'
 import Spinner from 'react-spinner'
 import Link from 'next/link'
@@ -9,7 +8,7 @@ import { bindActionCreators } from 'redux'
 import makeStore from '../redux/store/makeStore'
 import { fetchSingleBuild, pollFetchSingleBuild, fetchSteps, fetchMe } from '../redux/actions/async'
 import { closeSidemenu, resetBuild } from '../redux/actions'
-import Layout from '../components/Layout'
+import Main from '../components/Main'
 import Button from '../components/Button'
 import Octicon from '../components/Octicon'
 
@@ -48,11 +47,7 @@ class Build extends PureComponent {
   }
   render() {
     return (
-      <Layout
-        buildUrl={parse(this.props.build.build_url).pathname}
-        isServer={this.props.isServer}
-        showBackButton
-      >
+      <Main isServer={this.props.isServer} showBackButton>
         <style jsx>{`
           .container {
             padding: 10px 0;
@@ -107,7 +102,7 @@ class Build extends PureComponent {
             </div>
           })}</div>
         ) : null}
-      </Layout>
+      </Main>
     )
   }
 }

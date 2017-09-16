@@ -14,7 +14,7 @@ import Link from 'next/link'
 import { withRouter } from 'next/router'
 import withRedux from 'next-redux-wrapper'
 import { bindActionCreators } from 'redux'
-import Layout from '../components/Layout'
+import Main from '../components/Main'
 import Octicon from '../components/Octicon'
 import makeStore from '../redux/store/makeStore'
 import { fetchRecentBuilds, fetchMe } from '../redux/actions/async'
@@ -54,7 +54,7 @@ class Top extends PureComponent {
     const { page } = this.props.url.query
     const isFirst = !page || page === '0'
     return (
-      <Layout isServer={this.props.isServer}>
+      <Main isServer={this.props.isServer}>
         <style jsx>{`
           :global(.pagination.build-navs) {
             padding: 0 5px;
@@ -182,7 +182,7 @@ class Top extends PureComponent {
             </PaginationLink>
           </PaginationItem>
         </Pagination>
-      </Layout>
+      </Main>
     )
   }
 }

@@ -1,4 +1,5 @@
 import React from 'react'
+import { withRouter } from 'next/router'
 import { Label, Input, ListGroup, ListGroupItem } from 'reactstrap'
 import Avatar from 'react-avatar'
 import { connect } from 'react-redux'
@@ -14,10 +15,10 @@ const SideMenu = ({
   cancelBuild,
   rebuildWithoutCache,
   isOpen,
-  buildUrl,
   token,
   avatarUrl,
-  username
+  username,
+  router
 }) => {
   return (
     <aside className={classnames('global-sidemenu', { open: isOpen })}>
@@ -39,7 +40,10 @@ const SideMenu = ({
         :global(.global-sidemenu .user.list-group-item) {
           display: flex;
           align-items: center;
-          justify-content: center;
+          justify-content: start;
+        }
+        :global(.global-sidemenu .user.list-group-item .sb-avatar) {
+          margin-right: .5rem;
         }
         .open {
           transform: translateX(0);
@@ -50,7 +54,6 @@ const SideMenu = ({
         }
         .username {
           display: inline-block;
-          margin: .5rem;
           white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;
@@ -59,7 +62,7 @@ const SideMenu = ({
         }
       `}</style>
       <ListGroup>
-        {buildUrl ? [
+        {router.pathname === '/build' ? [
           <ListGroupItem key='rebuild' onClick={rebuild}>Rebuild</ListGroupItem>,
           <ListGroupItem key='cancel' onClick={cancelBuild}>Cancel</ListGroupItem>,
           <ListGroupItem key='rebuild-withou-cache' onClick={rebuildWithoutCache}>Rebuild without cache</ListGroupItem>,
@@ -95,4 +98,6 @@ export default connect(
     cancelBuild: () => cancelBuild(buildUrl),
     rebuildWithoutCache: () => rebuildWithoutCache(buildUrl),
   }, dispatch)
-)(SideMenu)
+)(
+  withRouter(SideMenu)
+)

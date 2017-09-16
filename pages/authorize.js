@@ -5,7 +5,7 @@ import { bindActionCreators } from 'redux'
 import { FormGroup, Label, InputGroup, InputGroupButton, Input } from 'reactstrap'
 import makeStore from '../redux/store/makeStore'
 import { authorize } from '../redux/actions'
-import Layout from '../components/Layout'
+import Main from '../components/Main'
 import Button from '../components/Button'
 
 class Authorize extends PureComponent {
@@ -16,17 +16,19 @@ class Authorize extends PureComponent {
     token: '',
   }
   componentWillReceiveProps(nextProps) {
-    if (this.props.authorized === false && nextProps.authorized === true) {
+    if (this.props.token !== nextProps.token) {
       const { location } = window
       const pathname = location.pathname === '/authorize' ? '/' : location.href
       location.assign(pathname)
     }
   }
   handleTokenChange = e => this.setState({ token: e.target.value })
-  handleAuth = () => this.props.authorize(this.state.token)
+  handleAuth = () => {
+    this.props.authorize(this.state.token)
+  }
   render() {
     return (
-      <Layout isServer={this.props.isServer} hideMenuButton>
+      <Main isServer={this.props.isServer} hideMenuButton>
         <style jsx>{`
           .container {
             position: absolute;
@@ -48,32 +50,16 @@ class Authorize extends PureComponent {
                 <Input type='password' name='password' id='token' onChange={this.handleTokenChange} value={this.state.token} />
                 <InputGroupButton><Button size='sm' onClick={this.handleAuth}>Authorize</Button></InputGroupButton>
               </InputGroup>
-              {/* <Input type='password' name='password' id='token' onChange={this.handleTokenChange} value={this.state.token} /> */}
             </FormGroup>
-            {/* <Button onClick={this.handleAuth}>Autorize</Button> */}
           </div>
         </div>
-      </Layout>
+      </Main>
     )
-    // return (
-    //   <div>
-    //     <Head>
-    //       <title>mo - CircleCI client for mobile web</title>
-    //       <meta name='viewport' content='initial-scale=1.0, width=device-width' />
-    //     </Head>
-    //     <p>Authorize</p>
-    //     <FormGroup>
-    //       <Label for='token'>API Token</Label>
-    //       <Input type='password' name='password' id='token' onChange={this.handleTokenChange} value={this.state.token} />
-    //     </FormGroup>
-    //     <Button onClick={this.handleAuth}>Autorize</Button>
-    //   </div>
-    // )
   }
 }
 
 export default withRedux(
   makeStore,
-  state => ({ authorized: !!state.auth.token }),
+  state => ({ token: state.auth.token }),
   dispatch => bindActionCreators({ authorize }, dispatch)
 )(Authorize)
