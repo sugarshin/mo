@@ -3536,9 +3536,9 @@ now-client@^1.1.1:
     request "2.76.0"
     request-promise-native "1.0.3"
 
-now@^7.4.0:
-  version "7.4.0"
-  resolved "https://registry.yarnpkg.com/now/-/now-7.4.0.tgz#2da0d236fd6d6d9277e9c5cf4ba87ea455788627"
+now@^8.3.3:
+  version "8.3.3"
+  resolved "https://registry.yarnpkg.com/now/-/now-8.3.3.tgz#be7f43f41d0c2581634dbcab81772a3306e55c4e"
 
 npmlog@^4.0.2:
   version "4.1.2"
