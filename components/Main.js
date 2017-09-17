@@ -20,7 +20,7 @@ class Main extends PureComponent {
     }
   }
   render() {
-    const { title, toggleSidemenu, isSidemenuOpen, children, isServer, showBackButton, hideMenuButton } = this.props
+    const { title, toggleSidemenu, isSidemenuOpen, children, isServer, showBackButton, hideMenuButton, router: { query } } = this.props
     return (
       <Layout title={title}>
         <div id='container'>
@@ -39,7 +39,7 @@ class Main extends PureComponent {
           {this.props.error ? <Error statusCode={this.props.error.status} /> : (
             this.props.loading ? <DelayedSpinner /> : <main id='main'>{children}</main>
           )}
-          <SideMenu isOpen={isSidemenuOpen} />
+          <SideMenu isOpen={isSidemenuOpen} buildUrl={query.url} />
         </div>
       </Layout>
     )
