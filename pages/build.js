@@ -78,22 +78,34 @@ class Build extends PureComponent {
             white-space: nowrap;
             overflow: auto;
           }
-          h4 {
+          h5 {
             text-align: center;
             margin-top: 1rem;
             word-wrap: break-word;
             overflow-wrap: break-word;
+            padding: 0 10px;
+          }
+          .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 100;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, .3);
           }
         `}</style>
         {this.props.isCancelRequesting || this.props.isRebuildRequesting ? (
-          <Spinner style={{
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            zIndex: 5,
-          }} />
+          <div className='overlay'>
+            <Spinner style={{
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              zIndex: 5,
+            }} />
+          </div>
         ) : null}
-        <h4>{`${this.props.build.username} / ${this.props.build.reponame} #${this.props.build.build_num}`}</h4>
+        <h5>{`${this.props.build.username} / ${this.props.build.reponame} / ${this.props.build.branch} / #${this.props.build.build_num}`}</h5>
         {this.props.build.vcs_revision ? (
           <div className='container'>{this.props.steps.map((s, i)=> {
             return <div className='s' key={`${s.name}${s.url || i}`}>
