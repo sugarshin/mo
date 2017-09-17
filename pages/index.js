@@ -62,6 +62,9 @@ class Top extends PureComponent {
             justify-content: space-between;
             align-items: center;
           }
+          :global(.pagination.build-navs .page-item.hidden) {
+            visibility: hidden;
+          }
           ul {
             margin: 1rem 0;
             list-style: none;
@@ -144,6 +147,7 @@ class Top extends PureComponent {
           :global(.build-navs .page-link a) {
             padding: 0.5rem 0.75rem;
             display: block;
+            line-height: 1;
           }
           :global(.build-list .list-group-item-text .sb-avatar) {
             margin-right: .2rem;
@@ -180,24 +184,18 @@ class Top extends PureComponent {
           ))}
         </ListGroup>
         <Pagination className='build-navs'>
-          <PaginationItem disabled={isFirst}>
+          <PaginationItem className={isFirst ? 'hidden' : ''}>
             <PaginationLink previous tag='span'>
-              {isFirst ? null : (
-                <Link
-                  href={{ query: { page: Math.max(parseInt(page, 10) - 1, 0) } }}
-                >
-                  <a>«</a>
-                </Link>
-              )}
+              <Link href={{ query: { page: Math.max(parseInt(page, 10) - 1, 0) } }}>
+                <a><Octicon name='chevron-left' /></a>
+              </Link>
             </PaginationLink>
           </PaginationItem>
           <PaginationItem>
             <PaginationLink next tag='span'>
-              <Link
-                href={{ query: { page: page ? parseInt(page, 10) + 1 : 1 } }}
-              >
-                <a>»</a>
-            </Link>
+              <Link href={{ query: { page: page ? parseInt(page, 10) + 1 : 1 } }}>
+                <a><Octicon name='chevron-right' /></a>
+              </Link>
             </PaginationLink>
           </PaginationItem>
         </Pagination>
