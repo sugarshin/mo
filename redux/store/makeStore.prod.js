@@ -1,5 +1,4 @@
 import { createStore, applyMiddleware } from 'redux'
-import reduxCatch from 'redux-catch'
 import thunk from 'redux-thunk'
 import throttle from 'redux-throttle'
 import Cookies from 'universal-cookie'
@@ -15,7 +14,6 @@ const makeStore = (initialState, { req }) => {
     rootReducer,
     merge({ auth: { token } }, initialState),
     applyMiddleware(
-      reduxCatch((e, getState, action) => console.error(e, getState(), action)), // eslint-disable-line no-console
       thunk.withExtraArgument({ cookies }),
       signoutOnAuthorizationError,
       createCookiesMiddleware({ cookies, option: { secure: true } }),

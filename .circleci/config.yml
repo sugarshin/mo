@@ -35,7 +35,7 @@ jobs:
           key: v1-dependencies-{{ .Branch }}-{{ checksum "yarn.lock" }}
       - deploy:
           command: |
-            npm run deploy -- --token=$NOW_TOKEN &>/dev/null
+            npm run deploy -- -e SENTRY_DSN=$SENTRY_DSN --token=$NOW_TOKEN &>/dev/null
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
               npm run alias -- --token=$NOW_TOKEN &>/dev/null
               npm run delete
