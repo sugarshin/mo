@@ -1,6 +1,7 @@
 import querystring from 'querystring'
 import { PureComponent } from 'react'
 import Spinner from 'react-spinner'
+import Ansi from 'ansi-to-react'
 import Link from 'next/link'
 import { withRouter } from 'next/router'
 import withRedux from 'next-redux-wrapper'
@@ -49,34 +50,33 @@ class Build extends PureComponent {
     return (
       <Main isServer={this.props.isServer} showBackButton>
         <style jsx>{`
-          .container {
+          .single-build-container {
             padding: 10px 0;
           }
-          pre {
-            border-radius: 0.25rem;
+          :global(.single-build-container .title .title-chevron) {
+            line-height: 1;
+            vertical-align: middle;
+            display: inline-block;
+            margin-right: .2rem;
           }
-          pre code {
-            color: #666;
-          }
-          .s {
+          .single-build {
             padding: 0 10px;
           }
-          .s pre {
+          .single-build pre.content {
+            border-radius: 0.25rem;
             padding: 10px;
-            background: #000;
             opacity: .6;
             -webkit-overflow-scrolling: touch;
+            color: #839496;
+            background: #000;
           }
           .title {
-            background: #000;
-            opacity: .6;
             margin: 10px 0 5px;
-            padding: 5px 10px;
+            padding: 5px 10px 5px 0;
             border-radius: 5px;
             font-weight: bold;
-            -webkit-overflow-scrolling: touch;
-            white-space: nowrap;
-            overflow: auto;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
           }
           h5 {
             text-align: center;
@@ -107,10 +107,14 @@ class Build extends PureComponent {
         ) : null}
         <h5>{`${this.props.build.username} / ${this.props.build.reponame} / ${this.props.build.branch} / #${this.props.build.build_num}`}</h5>
         {this.props.build.vcs_revision ? (
-          <div className='container'>{this.props.steps.map((s, i)=> {
-            return <div className='s' key={`${s.name}${s.url || i}`}>
-              <div className='title'>{s.name}</div>
-              <pre><code>{s.message === '' ? s.name : s.message}</code></pre>
+          <div className='single-build-container'>{this.props.steps.map((s, i)=> {
+            return <div className='single-build' key={`${s.name}${s.url || i}`}>
+              <h6 className='title'>
+                <Octicon name='chevron-right' className='title-chevron' />{s.name}
+              </h6>
+              <pre className='content'>
+                {s.message === '' ? <code>{s.name}</code> : <Ansi>{s.message}</Ansi>}
+              </pre>
             </div>
           })}</div>
         ) : null}

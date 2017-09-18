@@ -36,6 +36,7 @@ const SideMenu = ({
           border-left: 1px solid;
           overflow: auto;
           z-index: 4;
+          -webkit-overflow-scrolling: touch;
         }
         :global(.global-sidemenu .user.list-group-item) {
           display: flex;
