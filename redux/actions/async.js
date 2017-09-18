@@ -1,41 +1,24 @@
 import querystring from 'querystring'
 import request from '../../utils/request'
 import resolveVcsType from '../../utils/resolveVcsType'
-import {
-  fetchMeRequest,
-  fetchMeReceive,
-  fetchRecentBuildsRequest,
-  fetchRecentBuildsReceive,
-  fetchSingleBuildRequest,
-  fetchSingleBuildReceive,
-  fetchStepsRequest,
-  fetchStepsReceive,
-  rebuildRequest,
-  rebuildReceive,
-  cancelBuildRequest,
-  cancelBuildReceive,
-  deleteBuildCacheRequest,
-  deleteBuildCacheReceive,
-  rebuildWithoutCacheRequest,
-  rebuildWithoutCacheReceive
-} from './index'
+import * as actions from './index'
 
 const getApiRoot = req => req ? `${process.env.NODE_ENV === 'production' ? 'https:' : 'http:'}//${req.headers.host}` : ''
 
 export const fetchMe = ({ req } = {}) => async (dispatch, getState, { cookies }) => {
-  dispatch(fetchMeRequest())
+  dispatch(actions.fetchMeRequest())
   let payload
   try {
     payload = await request(`${getApiRoot(req)}/api/v1.1/me?circle-token=${cookies.get('__ct')}`)
   } catch (e) {
     payload = e
   } finally {
-    dispatch(fetchMeReceive(payload))
+    dispatch(actions.fetchMeReceive(payload))
   }
 }
 
 export const fetchRecentBuilds = ({ req, query = {} } = {}) => async (dispatch, getState, { cookies }) => {
-  dispatch(fetchRecentBuildsRequest())
+  dispatch(actions.fetchRecentBuildsRequest())
   let payload
   try {
     const queryString = querystring.stringify({
@@ -48,12 +31,12 @@ export const fetchRecentBuilds = ({ req, query = {} } = {}) => async (dispatch, 
   } catch (e) {
     payload = e
   } finally {
-    dispatch(fetchRecentBuildsReceive(payload))
+    dispatch(actions.fetchRecentBuildsReceive(payload))
   }
 }
 
 export const fetchSingleBuild = ({ req, url } = {}) => async (dispatch, getState, { cookies }) => {
-  dispatch(fetchSingleBuildRequest())
+  dispatch(actions.fetchSingleBuildRequest())
   let payload
   try {
     payload = await request(
@@ -62,7 +45,7 @@ export const fetchSingleBuild = ({ req, url } = {}) => async (dispatch, getState
   } catch (e) {
     payload = e
   } finally {
-    dispatch(fetchSingleBuildReceive(payload))
+    dispatch(actions.fetchSingleBuildReceive(payload))
   }
 }
 
@@ -75,12 +58,12 @@ export const pollFetchSingleBuild = ({ req, url } = {}) => async (dispatch, getS
   } catch (e) {
     payload = e
   } finally {
-    dispatch(fetchSingleBuildReceive(payload))
+    dispatch(actions.fetchSingleBuildReceive(payload))
   }
 }
 
 export const fetchSteps = data => async (dispatch, getState, { cookies }) => {
-  dispatch(fetchStepsRequest())
+  dispatch(actions.fetchStepsRequest())
   let payload
   try {
     const res = await Promise.all(
@@ -93,14 +76,14 @@ export const fetchSteps = data => async (dispatch, getState, { cookies }) => {
   } catch (e) {
     payload = e
   } finally {
-    dispatch(fetchStepsReceive(payload))
+    dispatch(actions.fetchStepsReceive(payload))
   }
 }
 
 // curl -X POST https://circleci.com/api/v1.1/project/:vcs-type/:username/:project/:build_num/retry?circle-token=:token
 // /:vcs-type/:username/:project/:build_num
 export const rebuild = url => async (dispatch, getState, { cookies }) => {
-  dispatch(rebuildRequest())
+  dispatch(actions.rebuildRequest())
   let payload
   try {
     payload = await request(
@@ -110,14 +93,14 @@ export const rebuild = url => async (dispatch, getState, { cookies }) => {
   } catch (e) {
     payload = e
   } finally {
-    dispatch(rebuildReceive(payload))
+    dispatch(actions.rebuildReceive(payload))
   }
 }
 
 // curl -X POST https://circleci.com/api/v1.1/project/:vcs-type/:username/:project/:build_num/cancel?circle-token=:token
 // /:vcs-type/:username/:project/:build_num
 export const cancelBuild = url => async (dispatch, getState, { cookies }) => {
-  dispatch(cancelBuildRequest())
+  dispatch(actions.cancelBuildRequest())
   let payload
   try {
     payload = await request(
@@ -127,14 +110,14 @@ export const cancelBuild = url => async (dispatch, getState, { cookies }) => {
   } catch (e) {
     payload = e
   } finally {
-    dispatch(cancelBuildReceive(payload))
+    dispatch(actions.cancelBuildReceive(payload))
   }
 }
 
 // curl -X DELETE https://circleci.com/api/v1.1/project/:vcs-type/:username/:project/build-cache?circle-token=:token
 // /:vcs-type/:username/:project
 export const deleteBuildCache = url => async (dispatch, getState, { cookies }) => {
-  dispatch(deleteBuildCacheRequest())
+  dispatch(actions.deleteBuildCacheRequest())
   let payload
   try {
     payload = await request(
@@ -144,12 +127,12 @@ export const deleteBuildCache = url => async (dispatch, getState, { cookies }) =
   } catch (e) {
     payload = e
   } finally {
-    dispatch(deleteBuildCacheReceive(payload))
+    dispatch(actions.deleteBuildCacheReceive(payload))
   }
 }
 
 export const rebuildWithoutCache = url => async (dispatch, getState, { cookies }) => {
-  dispatch(rebuildWithoutCacheRequest())
+  dispatch(actions.rebuildWithoutCacheRequest())
   const resolvedUrl = resolveVcsType(url)
   let payload
   try {
@@ -164,6 +147,6 @@ export const rebuildWithoutCache = url => async (dispatch, getState, { cookies }
   } catch (e) {
     payload = e
   } finally {
-    dispatch(rebuildWithoutCacheReceive(payload))
+    dispatch(actions.rebuildWithoutCacheReceive(payload))
   }
 };
