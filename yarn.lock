@@ -87,6 +87,10 @@ analytics-node@^3.0.0:
     remove-trailing-slash "^0.1.0"
     superagent "^3.5.0"
 
+anser@^1.4.1:
+  version "1.4.3"
+  resolved "https://registry.yarnpkg.com/anser/-/anser-1.4.3.tgz#fe5ff9abd9a6b2283cc90c099aa566b5de2db551"
+
 ansi-escapes@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/ansi-escapes/-/ansi-escapes-2.0.0.tgz#5bae52be424878dd9783e8910e3fc2922e83c81b"
@@ -112,6 +116,13 @@ ansi-styles@^3.1.0, ansi-styles@^3.2.0:
   resolved "https://registry.yarnpkg.com/ansi-styles/-/ansi-styles-3.2.0.tgz#c159b8d5be0f9e5a6f346dab94f16ce022161b88"
   dependencies:
     color-convert "^1.9.0"
+
+ansi-to-react@^1.6.1:
+  version "1.6.1"
+  resolved "https://registry.yarnpkg.com/ansi-to-react/-/ansi-to-react-1.6.1.tgz#e38322bb2becfdcdeda5d8a87c6bc9fc46b5c81e"
+  dependencies:
+    anser "^1.4.1"
+    escape-carriage "^1.2.0"
 
 any-promise@^0.1.0:
   version "0.1.0"
@@ -1776,6 +1787,10 @@ es6-weak-map@^2.0.1:
     es5-ext "^0.10.14"
     es6-iterator "^2.0.1"
     es6-symbol "^3.1.1"
+
+escape-carriage@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/escape-carriage/-/escape-carriage-1.2.0.tgz#35ce51a7960efcb5ae8bb59b83f566a98c946dfd"
 
 escape-html@~1.0.1, escape-html@~1.0.3:
   version "1.0.3"
