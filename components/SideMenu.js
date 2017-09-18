@@ -24,8 +24,9 @@ const SideMenu = ({
     <aside className={classnames('global-sidemenu', { open: isOpen })}>
       <style jsx>{`
         aside {
+          padding: 50px 0;
           position: fixed;
-          top: 50px;
+          top: 0;
           right: 0;
           height: 100%;
           transform: translateX(100%);
@@ -35,7 +36,7 @@ const SideMenu = ({
           background: #002B36;
           border-left: 1px solid;
           overflow: auto;
-          z-index: 4;
+          z-index: 3;
           -webkit-overflow-scrolling: touch;
         }
         :global(.global-sidemenu .user.list-group-item) {
