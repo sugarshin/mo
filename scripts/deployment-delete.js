@@ -16,6 +16,7 @@ const main = async () => {
       console.log(`Success!
 
 ${targets.map(t => `Deployment ${t.uid} removed`).join('\n')}
+
 `)
       return
     }

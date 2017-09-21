@@ -9,9 +9,9 @@
     "dev": "node server",
     "prebuild": "npm run clean:build",
     "build": "next build",
-    "deploy": "now --public -e NODE_ENV=production -n moci --no-clipboard",
+    "deployment:pop": "node ./scripts/deployment-pop",
+    "deployment:delete": "node ./scripts/deployment-delete",
     "alias": "now alias --no-clipboard",
-    "delete": "node ./scripts/deployment-delete",
     "start": "node ./server"
   },
   "repository": {
