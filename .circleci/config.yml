@@ -35,8 +35,10 @@ jobs:
           key: v1-dependencies-{{ .Branch }}-{{ checksum "yarn.lock" }}
       - deploy:
           command: |
-            npm run deploy -- -e SENTRY_DSN=$SENTRY_DSN --token=$NOW_TOKEN &>/dev/null
+            npm run deployment:pop
+            ./node_modules/.bin/now --public -e NODE_ENV=production -e SENTRY_DSN=$SENTRY_DSN -n moci --no-clipboard --token=$NOW_TOKEN
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
               npm run alias -- --token=$NOW_TOKEN &>/dev/null
-              npm run delete
+              npm run deployment:delete
+              DATA=\{\"text\":\"mo\ has\ been\ updated\ \<https://moci.now.sh/\>\"\}; curl -XPOST -d $DATA $SLACK_WEBHOOK_URL
             fi
