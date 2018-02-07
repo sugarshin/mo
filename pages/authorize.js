@@ -57,7 +57,7 @@ class Authorize extends PureComponent {
               <Label for='token'>API Token</Label>
               <InputGroup>
                 <Input type='password' name='password' id='token' onChange={this.handleTokenChange} value={this.state.token} />
-                <InputGroupAddon>
+                <InputGroupAddon addonType='append'>
                   <Button onClick={this.handleAuth}>Authorize</Button>
                 </InputGroupAddon>
               </InputGroup>
