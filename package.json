@@ -11,7 +11,7 @@
     "build": "next build",
     "deployment:pop": "node ./scripts/deployment-pop",
     "deployment:delete": "node ./scripts/deployment-delete",
-    "alias": "now alias --no-clipboard",
+    "alias": "now alias",
     "start": "node ./server"
   },
   "repository": {

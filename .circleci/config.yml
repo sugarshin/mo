@@ -36,8 +36,9 @@ jobs:
       - deploy:
           command: |
             npm run deployment:pop
-            ./node_modules/.bin/now --public -e NODE_ENV=production -e SENTRY_DSN=$SENTRY_DSN -n moci --no-clipboard --token=$NOW_TOKEN
+            ./node_modules/.bin/now --public -e NODE_ENV=production -e SENTRY_DSN=$SENTRY_DSN -n moci --token=$NOW_TOKEN
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              ./node_modules/.bin/now scale moci.now.sh 0
               npm run alias -- --token=$NOW_TOKEN &>/dev/null
               ./node_modules/.bin/now scale moci.now.sh 1 2
               npm run deployment:delete
