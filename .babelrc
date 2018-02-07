@@ -24,6 +24,9 @@
     },
     "production": {
       "plugins": ["transform-inline-environment-variables"]
+    },
+    "test": {
+      "plugins": ["transform-es2015-modules-commonjs"]
     }
   }
 }
