@@ -11,7 +11,9 @@ const main = async () => {
   if (instanceCount >= 3 || deployments.length >= 3) { // upper limit for free plan
     const aliases = await now.getAliases()
     const mociId = (aliases.find(a => a.alias === 'moci.now.sh') || {}).deploymentId
-    const targets = deployments.filter(d => d.uid !== mociId)
+    const targets = deployments
+      .filter(d => d.uid !== mociId)
+      .filter(d => d.scale.current > 0)
     const oldest = Math.min(...targets.map(d => d.created))
     const target = targets.find(d => d.created === oldest)
     await now.deleteDeployment(target.uid)
