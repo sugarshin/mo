@@ -38,9 +38,7 @@ jobs:
             npm run deployment:pop
             ./node_modules/.bin/now --force --public -e NODE_ENV=production -e SENTRY_DSN=$SENTRY_DSN -n moci --token=$NOW_TOKEN
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
-              ./node_modules/.bin/now scale moci.now.sh 1 --token=$NOW_TOKEN
-              ./node_modules/.bin/now alias --token=$NOW_TOKEN
-              ./node_modules/.bin/now scale moci.now.sh 2 --token=$NOW_TOKEN
+              bash scripts/alias-create.sh
               npm run deployment:delete
               node scripts/slack-notify
             fi
