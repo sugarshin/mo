@@ -2,7 +2,15 @@ import { PureComponent } from 'react'
 import Head from 'next/head'
 import withRedux from 'next-redux-wrapper'
 import { bindActionCreators } from 'redux'
-import { FormGroup, Label, InputGroup, InputGroupButton, Input } from 'reactstrap'
+import {
+  FormGroup,
+  Label,
+  InputGroup,
+  InputGroupButton,
+  Input,
+  InputGroupAddon,
+  InputGroupText
+} from 'reactstrap'
 import makeStore from '../redux/store/makeStore'
 import { authorize } from '../redux/actions'
 import Main from '../components/Main'
@@ -31,24 +39,27 @@ class Authorize extends PureComponent {
       <Main isServer={this.props.isServer} hideMenuButton>
         <style jsx>{`
           .container {
-            position: absolute;
+            height: calc(100vh - 50px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
+          .content {
             width: 100%;
-            top: 50%;
-            left: 0;
-            transform: translateY(-50%);
-            z-index: 1;
           }
           :global(#token) {
             border: 0;
           }
         `}</style>
         <div className='container'>
-          <div>
+          <div className='content'>
             <FormGroup>
               <Label for='token'>API Token</Label>
               <InputGroup>
                 <Input type='password' name='password' id='token' onChange={this.handleTokenChange} value={this.state.token} />
-                <InputGroupButton><Button size='sm' onClick={this.handleAuth}>Authorize</Button></InputGroupButton>
+                <InputGroupAddon addonType='append'>
+                  <Button onClick={this.handleAuth}>Authorize</Button>
+                </InputGroupAddon>
               </InputGroup>
             </FormGroup>
           </div>
