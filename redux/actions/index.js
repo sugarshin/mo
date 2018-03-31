@@ -1,6 +1,6 @@
 import { createAction } from 'redux-actions'
-import addMonths from 'date-fns/add_months'
-import ms from 'ms'
+import { CIRCLECI_TOKEN } from '../../constants/configKeys'
+import { year2038Millisecond } from '../../utils/date'
 
 const AUTHORIZE = 'AUTHORIZE'
 export const authorize = createAction(
@@ -8,11 +8,11 @@ export const authorize = createAction(
   null,
   payload => ({
     cookies: {
-      __ct: {
+      [CIRCLECI_TOKEN]: {
         value: payload,
         option: {
-          expires: addMonths(new Date(), 3),
-          maxAge: ms(`${30 * 3}d`),
+          expires: new Date(year2038Millisecond),
+          maxAge: year2038Millisecond - Date.now(),
         },
       },
     },
@@ -23,7 +23,7 @@ const SIGNOUT = 'SIGNOUT'
 export const signout = createAction(
   SIGNOUT,
   null,
-  payload => ({ cookies: { __ct: { value: null } } })
+  payload => ({ cookies: { [CIRCLECI_TOKEN]: { value: null } } })
 )
 
 const FETCH_ME_REQUEST = 'FETCH_ME_REQUEST'

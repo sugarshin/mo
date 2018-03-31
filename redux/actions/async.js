@@ -1,6 +1,7 @@
 import querystring from 'querystring'
 import request from '../../utils/request'
 import resolveVcsType from '../../utils/resolveVcsType'
+import { CIRCLECI_TOKEN } from '../../constants/configKeys'
 import * as actions from './index'
 
 const getApiRoot = req => req ? `${process.env.NODE_ENV === 'production' ? 'https:' : 'http:'}//${req.headers.host}` : ''
@@ -9,7 +10,7 @@ export const fetchMe = ({ req } = {}) => async (dispatch, getState, { cookies })
   dispatch(actions.fetchMeRequest())
   let payload
   try {
-    payload = await request(`${getApiRoot(req)}/api/v1.1/me?circle-token=${cookies.get('__ct')}`)
+    payload = await request(`${getApiRoot(req)}/api/v1.1/me?circle-token=${cookies.get(CIRCLECI_TOKEN)}`)
   } catch (e) {
     payload = e
   } finally {
@@ -25,7 +26,7 @@ export const fetchRecentBuilds = ({ req, query = {} } = {}) => async (dispatch, 
       offset: 0,
       limit: 20,
       ...query,
-      'circle-token': cookies.get('__ct'),
+      'circle-token': cookies.get(CIRCLECI_TOKEN),
     })
     payload = await request(`${getApiRoot(req)}/api/v1.1/recent-builds?${queryString}`)
   } catch (e) {
@@ -40,7 +41,7 @@ export const fetchSingleBuild = ({ req, url } = {}) => async (dispatch, getState
   let payload
   try {
     payload = await request(
-      `${getApiRoot(req)}/api/v1.1/project${resolveVcsType(url)}?circle-token=${cookies.get('__ct')}`
+      `${getApiRoot(req)}/api/v1.1/project${resolveVcsType(url)}?circle-token=${cookies.get(CIRCLECI_TOKEN)}`
     )
   } catch (e) {
     payload = e
@@ -53,7 +54,7 @@ export const pollFetchSingleBuild = ({ req, url } = {}) => async (dispatch, getS
   let payload
   try {
     payload = await request(
-      `${getApiRoot(req)}/api/v1.1/project${resolveVcsType(url)}?circle-token=${cookies.get('__ct')}`
+      `${getApiRoot(req)}/api/v1.1/project${resolveVcsType(url)}?circle-token=${cookies.get(CIRCLECI_TOKEN)}`
     )
   } catch (e) {
     payload = e
@@ -87,7 +88,7 @@ export const rebuild = url => async (dispatch, getState, { cookies }) => {
   let payload
   try {
     payload = await request(
-      `/api/v1.1/project${resolveVcsType(url)}/retry?circle-token=${cookies.get('__ct')}`,
+      `/api/v1.1/project${resolveVcsType(url)}/retry?circle-token=${cookies.get(CIRCLECI_TOKEN)}`,
       { method: 'POST' }
     )
   } catch (e) {
@@ -104,7 +105,7 @@ export const cancelBuild = url => async (dispatch, getState, { cookies }) => {
   let payload
   try {
     payload = await request(
-      `/api/v1.1/project${resolveVcsType(url)}/cancel?circle-token=${cookies.get('__ct')}`,
+      `/api/v1.1/project${resolveVcsType(url)}/cancel?circle-token=${cookies.get(CIRCLECI_TOKEN)}`,
       { method: 'POST' }
     )
   } catch (e) {
@@ -121,7 +122,7 @@ export const deleteBuildCache = url => async (dispatch, getState, { cookies }) =
   let payload
   try {
     payload = await request(
-      `/api/v1.1/project${resolveVcsType(url)}/build-cache?circle-token=${cookies.get('__ct')}`,
+      `/api/v1.1/project${resolveVcsType(url)}/build-cache?circle-token=${cookies.get(CIRCLECI_TOKEN)}`,
       { method: 'DELETE' }
     )
   } catch (e) {
@@ -137,11 +138,11 @@ export const rebuildWithoutCache = url => async (dispatch, getState, { cookies }
   let payload
   try {
     await request(
-      `/api/v1.1/project${resolvedUrl.replace(/\/[0-9]+$/, '')}/build-cache?circle-token=${cookies.get('__ct')}`,
+      `/api/v1.1/project${resolvedUrl.replace(/\/[0-9]+$/, '')}/build-cache?circle-token=${cookies.get(CIRCLECI_TOKEN)}`,
       { method: 'DELETE' }
     )
     payload = await request(
-      `/api/v1.1/project${resolvedUrl}/retry?circle-token=${cookies.get('__ct')}`,
+      `/api/v1.1/project${resolvedUrl}/retry?circle-token=${cookies.get(CIRCLECI_TOKEN)}`,
       { method: 'POST' }
     )
   } catch (e) {

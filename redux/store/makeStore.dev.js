@@ -8,10 +8,11 @@ import { merge } from 'lodash'
 import createCookiesMiddleware from '../middlewares/cookies'
 import signoutOnAuthorizationError from '../middlewares/signoutOnAuthorizationError'
 import rootReducer from '../reducers'
+import { CIRCLECI_TOKEN } from '../../constants/configKeys'
 
 const makeStore = (initialState, { req, isServer }) => {
   const cookies = new Cookies(req ? (req.headers.cookie || '') : null)
-  const token = cookies.get('__ct') || null
+  const token = cookies.get(CIRCLECI_TOKEN) || null
   const store = createStore(
     rootReducer,
     merge({ auth: { token } }, initialState),

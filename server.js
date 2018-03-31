@@ -5,6 +5,7 @@ const proxies = require('koa-proxies')
 const connect = require('koa-connect')
 const compression = require('compression')
 const Raven = require('raven')
+const { CIRCLECI_TOKEN } = require('./constants/configKeys')
 
 const port = parseInt(process.env.PORT, 10) || 3000
 const dev = process.env.NODE_ENV !== 'production'
@@ -25,7 +26,7 @@ app.prepare().then(() => {
   }
 
   router.get('*', async (ctx, next) => {
-    if (!ctx.cookies.get('__ct')) {
+    if (!ctx.cookies.get(CIRCLECI_TOKEN)) {
       await app.render(ctx.req, ctx.res, '/authorize', ctx.query)
       ctx.respond = false
     } else {
