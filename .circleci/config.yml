@@ -1,44 +1,117 @@
+referecnes:
+  defaults: &defaults
+    docker:
+      - image: circleci/node:8.10.0
+    working_directory: ~/workspace
+    environment:
+      TZ: '/usr/share/zoneinfo/UTC'
+  restore_git_cache: &restore_git_cache
+    name: Restoring Cache - Git
+    keys:
+      - comuque-frontend-git-v2-{{ .Branch }}-
+  save_git_cache: &save_git_cache
+    name: Storing Cache - Git
+    key: comuque-frontend-git-v2-{{ .Branch }}-
+    paths:
+      - ~/.ssh
+      - ~/.gitconfig
+  restore_yarn_cache: &restore_yarn_cache
+    name: Restoring Cache - Dependencies
+    keys:
+      - comuque-frontend-yarn-v1-{{ .Branch }}-{{ checksum "yarn.lock" }}
+      - comuque-frontend-yarn-v1-{{ .Branch }}-
+  save_yarn_cache: &save_yarn_cache
+    name: Storing Cache - Dependencies
+    key: comuque-frontend-yarn-v1-{{ .Branch }}-{{ checksum "yarn.lock" }}
+    paths:
+      - ~/.cache/yarn/
+      - ~/workspace/node_modules
+
 version: 2
 jobs:
   build:
-    working_directory: ~/workspace
-    docker:
-      - image: circleci/node:8.10.0
+    <<: *defaults
     steps:
       - checkout
+      - restore_cache: *restore_git_cache
       - run:
           name: Configure Git
           command: |
             git config --global user.name 'CircleCI'
             git config --global user.email 's+circleci@sugarshin.net'
-      - restore_cache:
-          name: Restoring Cache - dependencies
-          keys:
-            - v1-dependencies-{{ .Branch }}-{{ checksum "yarn.lock" }}
-            - v1-dependencies-
-      - run:
-          name: System information
-          command: |
-            echo "Node.js $(node -v)"
-            echo "npm $(npm -v)"
-            echo "Yarn v$(yarn --version)"
+      - save_cache: *save_git_cache
+      - restore_cache: *restore_yarn_cache
       - run:
           name: Install dependencies
           command: yarn
+      - save_cache: *save_yarn_cache
+      - store_artifacts:
+          path: npm-debug.log
+  test:
+    <<: *defaults
+    steps:
+      - checkout
+      - restore_cache: *restore_git_cache
+      - restore_cache: *restore_yarn_cache
       - run:
           name: Test
           command: npm test
-      - save_cache:
-          paths:
-            - ~/workspace/node_modules
-            - ~/.cache/yarn/
-          key: v1-dependencies-{{ .Branch }}-{{ checksum "yarn.lock" }}
-      - deploy:
+      - store_artifacts:
+          path: npm-debug.log
+  deployment_pop:
+    <<: *defaults
+    steps:
+      - checkout
+      - restore_cache: *restore_git_cache
+      - restore_cache: *restore_yarn_cache
+      - run:
+          name: Remove Last Deployment
+          command: npm run deployment:pop
+      - store_artifacts:
+          path: npm-debug.log
+  deploy:
+    <<: *defaults
+    steps:
+      - checkout
+      - restore_cache: *restore_git_cache
+      - restore_cache: *restore_yarn_cache
+      - run:
+          name: Deploy
+          command: ./node_modules/.bin/now --force --public -e NODE_ENV=production -e SENTRY_DSN=$SENTRY_DSN -n moci --token=$NOW_TOKEN
+      - store_artifacts:
+          path: npm-debug.log
+  production_alias:
+    <<: *defaults
+    steps:
+      - checkout
+      - restore_cache: *restore_git_cache
+      - restore_cache: *restore_yarn_cache
+      - run:
+          name: Alias Production
           command: |
-            npm run deployment:pop
-            ./node_modules/.bin/now --force --public -e NODE_ENV=production -e SENTRY_DSN=$SENTRY_DSN -n moci --token=$NOW_TOKEN
-            if [ "${CIRCLE_BRANCH}" == "master" ]; then
-              bash scripts/alias-create.sh
-              npm run deployment:delete
-              node scripts/slack-notify
-            fi
+            bash scripts/alias-create.sh
+            npm run deployment:delete
+            node scripts/slack-notify
+      - store_artifacts:
+          path: npm-debug.log
+
+workflows:
+  version: 2
+  build-test-and-deploy:
+    jobs:
+      - build
+      - test:
+          requires:
+            - build
+      - deployment_pop:
+          requires:
+            - test
+      - deploy:
+          requires:
+            - deployment_pop
+      - production_alias:
+          filters:
+            branches:
+              only: 'master'
+          requires:
+            - deploy
