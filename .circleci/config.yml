@@ -88,10 +88,13 @@ jobs:
       - restore_cache: *restore_yarn_cache
       - run:
           name: Alias Production
-          command: |
-            bash scripts/alias-create.sh
-            npm run deployment:delete
-            node scripts/slack-notify
+          command: bash scripts/alias-create.sh
+      - run:
+          name: Delete Other Deployment
+          command: npm run deployment:delete
+      - run:
+          name: Notify Slack
+          command: node scripts/slack-notify
       - store_artifacts:
           path: npm-debug.log
 
