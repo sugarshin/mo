@@ -82,8 +82,8 @@ jobs:
           name: Alias production
           command: |
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
-              ./node_modules/.bin/now alias set $(pbpaste) moci --token=$NOW_TOKEN && \
-              ./node_modules/.bin/now scale $(pbpaste) sfo 1 --token=$NOW_TOKEN
+              ./node_modules/.bin/now alias moci --token=$NOW_TOKEN && \
+              ./node_modules/.bin/now scale sfo 1 --token=$NOW_TOKEN
             fi
       - store_artifacts:
           path: npm-debug.log
