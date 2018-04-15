@@ -1,7 +1,7 @@
 referecnes:
   defaults: &defaults
     docker:
-      - image: circleci/node:8.10.0
+      - image: circleci/node:8.11.1
     working_directory: ~/workspace
     environment:
       TZ: '/usr/share/zoneinfo/UTC'
