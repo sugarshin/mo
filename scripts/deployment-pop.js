@@ -1,4 +1,4 @@
-const NowClient = require('now-client')
+const NowClient = require('./NowClient')
 
 const now = new NowClient(process.env.NOW_TOKEN)
 
