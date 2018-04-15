@@ -78,17 +78,21 @@ jobs:
       - run:
           name: Deploy
           command: ./node_modules/.bin/now --force --public -e NODE_ENV=production -e SENTRY_DSN=$SENTRY_DSN -n moci --token=$NOW_TOKEN
+      - run:
+          name: Alias production
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              ./node_modules/.bin/now alias set $(pbpaste) moci --token=$NOW_TOKEN && \
+              ./node_modules/.bin/now scale $(pbpaste) sfo 1 --token=$NOW_TOKEN
+            fi
       - store_artifacts:
           path: npm-debug.log
-  production_alias:
+  other_deployment_delete:
     <<: *defaults
     steps:
       - checkout
       - restore_cache: *restore_git_cache
       - restore_cache: *restore_yarn_cache
-      - run:
-          name: Alias Production
-          command: bash scripts/alias-create.sh
       - run:
           name: Delete Other Deployment
           command: npm run deployment:delete
@@ -112,7 +116,7 @@ workflows:
       - deploy:
           requires:
             - deployment_pop
-      - production_alias:
+      - other_deployment_delete:
           filters:
             branches:
               only: 'master'
