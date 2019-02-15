@@ -1,32 +1,17 @@
 {
-  "presets": [
-    "next/babel"
-  ],
-  "plugins": [
-    [
-      "module-resolver",
-      {
-        "root": ["."],
-        "alias": {
-          "styles": "./styles"
-        },
-        "cwd": "babelrc"
-      }
-    ],
-    [
-      "wrap-in-js",
-      { "extensions": ["css$"] }
-    ]
-  ],
   "env": {
-    "development": {
-      "plugins": ["inline-dotenv"]
-    },
-    "production": {
-      "plugins": ["transform-inline-environment-variables"]
-    },
     "test": {
-      "plugins": ["transform-es2015-modules-commonjs"]
+      "presets": [
+        [
+          "@babel/preset-env",
+          {
+            "targets": {
+              "node": "current"
+            }
+          }
+        ],
+        "@nuxt/babel-preset-app"
+      ]
     }
   }
 }

@@ -8,9 +8,11 @@ const main = async () => {
     (num, d) => num + (d.scale && d.scale.current ? d.scale.current : 0),
     0
   )
-  if (instanceCount >= 3 || deployments.length >= 3) { // upper limit for free plan
+  if (instanceCount >= 3 || deployments.length >= 3) {
+    // upper limit for free plan
     const aliases = await now.getAliases()
-    const mociId = (aliases.find(a => a.alias === 'moci.now.sh') || {}).deploymentId
+    const mociId = (aliases.find(a => a.alias === 'moci.now.sh') || {})
+      .deploymentId
     const targets = deployments
       .filter(d => d.uid !== mociId)
       .filter(d => d.scale.current > 0)

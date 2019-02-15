@@ -4,7 +4,8 @@ const now = new NowClient(process.env.NOW_TOKEN)
 
 const main = async () => {
   const aliases = await now.getAliases()
-  const mociId = (aliases.find(a => a.alias === 'moci.now.sh') || {}).deploymentId
+  const mociId = (aliases.find(a => a.alias === 'moci.now.sh') || {})
+    .deploymentId
   if (mociId) {
     const deployments = await now.getDeployments()
     const targets = deployments.filter(d => d.uid !== mociId)
