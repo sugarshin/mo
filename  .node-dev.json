@@ -1,0 +1,18 @@
+{
+  "ignore": [
+    "build",
+    "node_modules",
+    "scripts",
+    "src/assets",
+    "src/components",
+    "src/layouts",
+    "src/middleware",
+    "src/pages",
+    "src/plugins",
+    "src/static",
+    "src/store",
+    "test",
+    ".eslintrc.js",
+    "jest.config.js"
+  ]
+}

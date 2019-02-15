@@ -16,14 +16,14 @@ module.exports = class NowClient {
   get header() {
     return {
       Authorization: `Bearer ${this.token}`,
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     }
   }
   async request(pathname, opts) {
     try {
       const res = await fetch(`${this.origin}${pathname}`, {
         headers: this.header,
-        ...opts
+        ...opts,
       })
       return await res.json()
     } catch (e) {
@@ -40,8 +40,9 @@ module.exports = class NowClient {
     return res.aliases
   }
   async deleteDeployment(uid) {
-    return await this.request(`/v2/now/deployments/${uid}`, {
-      method: 'DELETE'
+    const res = await this.request(`/v2/now/deployments/${uid}`, {
+      method: 'DELETE',
     })
+    return res
   }
 }

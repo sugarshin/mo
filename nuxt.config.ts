@@ -6,6 +6,7 @@ export default {
   srcDir: 'src/',
   buildDir: 'build',
   dev: process.env.NODE_ENV !== 'production',
+
   /*
   ** Headers of the page
   */
