@@ -1,11 +1,9 @@
-const express = require('express')
-const consola = require('consola')
-const { Nuxt, Builder } = require('nuxt')
-const app = express()
+import express from 'express'
+import consola from 'consola'
+import { Nuxt, Builder } from 'nuxt'
+import config from '../../nuxt.config'
 
-// Import and Set Nuxt.js options
-const config = require('../../nuxt.config.js')
-config.dev = !(process.env.NODE_ENV === 'production')
+const app = express()
 
 async function start() {
   // Init Nuxt.js
@@ -32,4 +30,5 @@ async function start() {
     badge: true
   })
 }
+
 start()

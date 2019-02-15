@@ -1,19 +1,20 @@
-const pkg = require('./package')
+import { Configuration } from 'webpack'
+import { Context } from '@nuxt/vue-app'
 
-module.exports = {
+export default {
   mode: 'universal',
   srcDir: 'src/',
   buildDir: 'build',
-
+  dev: process.env.NODE_ENV !== 'production',
   /*
   ** Headers of the page
   */
   head: {
-    title: pkg.name,
+    title: 'mo - CircleCI Client for Mobile Web',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: pkg.description }
+      { hid: 'description', name: 'description', content: 'CircleCI Client for Mobile Web' }
     ],
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
   },
@@ -57,14 +58,13 @@ module.exports = {
     /*
     ** You can extend webpack config here
     */
-    extend(config, ctx) {
+    extend(config: Configuration, ctx: Context) {
       // Run ESLint on save
       if (ctx.isDev && ctx.isClient) {
-        config.module.rules.push({
+        config.module!.rules.push({
           enforce: 'pre',
           test: /\.(js|vue)$/,
           loader: 'eslint-loader',
-          exclude: /(node_modules)/
         })
       }
     }
