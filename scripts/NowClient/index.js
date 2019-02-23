@@ -5,13 +5,13 @@ module.exports = class NowClient {
     if (!token) {
       throw new Error('token must be required')
     }
-    this._token = token;
+    this._token = token
   }
   get origin() {
     return 'https://api.zeit.co'
   }
   get token() {
-    return this._token;
+    return this._token
   }
   get header() {
     return {
@@ -40,6 +40,9 @@ module.exports = class NowClient {
     return res.aliases
   }
   async deleteDeployment(uid) {
-    return await this.request(`/v2/now/deployments/${uid}`, { method: 'DELETE' })
+    const res = await this.request(`/v2/now/deployments/${uid}`, {
+      method: 'DELETE',
+    })
+    return res
   }
 }
